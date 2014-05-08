@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>clustering.clusterer</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="clustering-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://github.com/xsyann/ocr">OCR</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        <a href="clustering-module.html">Package&nbsp;clustering</a> ::
+        Module&nbsp;clusterer
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="clustering.clusterer-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="clustering.clusterer-module.html">Module clustering.clusterer</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-comment">#!/usr/bin/env python</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-comment">##</tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"><tt class="py-comment">## clusterer.py</tt> </tt>
+<a name="L4"></a><tt class="py-lineno"> 4</tt>  <tt class="py-line"><tt class="py-comment">##</tt> </tt>
+<a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line"><tt class="py-comment">## Made by xs_yann</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-comment">## Contact &lt;contact@xsyann.com&gt;</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-comment">##</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-comment">## Started on  Fri Apr 25 18:16:06 2014 xs_yann</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-comment">## Last update Thu May  8 22:40:11 2014 xs_yann</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-comment">##</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">time</tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">numpy</tt> <tt class="py-keyword">as</tt> <tt class="py-name">np</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">cv2</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"> </tt>
+<a name="Clusterer"></a><div id="Clusterer-def"><a name="L17"></a><tt class="py-lineno">17</tt> <a class="py-toggle" href="#" id="Clusterer-toggle" onclick="return toggle('Clusterer');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="clustering.clusterer.Clusterer-class.html">Clusterer</a><tt class="py-op">:</tt> </tt>
+</div><div id="Clusterer-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="Clusterer-expanded"><a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">    <tt class="py-docstring">"""</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-docstring">    Extract image clusters.</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-docstring">    """</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">    <tt id="link-0" class="py-name" targets="Variable clustering.clusterer.Clusterer.RANDOM=clustering.clusterer.Clusterer-class.html#RANDOM"><a title="clustering.clusterer.Clusterer.RANDOM" class="py-name" href="#" onclick="return doclink('link-0', 'RANDOM', 'link-0');">RANDOM</a></tt> <tt class="py-op">=</tt> <tt class="py-number">0</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">    <tt id="link-1" class="py-name" targets="Variable clustering.clusterer.Clusterer.PLUSPLUS=clustering.clusterer.Clusterer-class.html#PLUSPLUS"><a title="clustering.clusterer.Clusterer.PLUSPLUS" class="py-name" href="#" onclick="return doclink('link-1', 'PLUSPLUS', 'link-1');">PLUSPLUS</a></tt> <tt class="py-op">=</tt> <tt class="py-number">1</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">    <tt id="link-2" class="py-name" targets="Variable clustering.clusterer.Clusterer.K=clustering.clusterer.Clusterer-class.html#K"><a title="clustering.clusterer.Clusterer.K" class="py-name" href="#" onclick="return doclink('link-2', 'K', 'link-2');">K</a></tt> <tt class="py-op">=</tt> <tt class="py-number">2</tt> <tt class="py-comment"># TODO: Dynamic K</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line"> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">    <tt id="link-3" class="py-name" targets="Variable clustering.clusterer.Clusterer.__modes=clustering.clusterer.Clusterer-class.html#__modes"><a title="clustering.clusterer.Clusterer.__modes" class="py-name" href="#" onclick="return doclink('link-3', '__modes', 'link-3');">__modes</a></tt> <tt class="py-op">=</tt> <tt class="py-op">{</tt> <tt id="link-4" class="py-name"><a title="clustering.clusterer.Clusterer.RANDOM" class="py-name" href="#" onclick="return doclink('link-4', 'RANDOM', 'link-0');">RANDOM</a></tt><tt class="py-op">:</tt> <tt class="py-name">cv2</tt><tt class="py-op">.</tt><tt class="py-name">KMEANS_RANDOM_CENTERS</tt><tt class="py-op">,</tt> <tt id="link-5" class="py-name"><a title="clustering.clusterer.Clusterer.PLUSPLUS" class="py-name" href="#" onclick="return doclink('link-5', 'PLUSPLUS', 'link-1');">PLUSPLUS</a></tt><tt class="py-op">:</tt> <tt class="py-name">cv2</tt><tt class="py-op">.</tt><tt class="py-name">KMEANS_PP_CENTERS</tt> <tt class="py-op">}</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line"> </tt>
+<a name="Clusterer.getClusters"></a><div id="Clusterer.getClusters-def"><a name="L28"></a><tt class="py-lineno">28</tt> <a class="py-toggle" href="#" id="Clusterer.getClusters-toggle" onclick="return toggle('Clusterer.getClusters');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="clustering.clusterer.Clusterer-class.html#getClusters">getClusters</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">imagePath</tt><tt class="py-op">,</tt> <tt class="py-param">backgroundColor</tt><tt class="py-op">=</tt><tt class="py-op">(</tt><tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">,</tt> <tt class="py-number">0</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-param">mode</tt><tt class="py-op">=</tt><tt id="link-6" class="py-name"><a title="clustering.clusterer.Clusterer.PLUSPLUS" class="py-name" href="#" onclick="return doclink('link-6', 'PLUSPLUS', 'link-1');">PLUSPLUS</a></tt><tt class="py-op">,</tt> <tt class="py-param">verbose</tt><tt class="py-op">=</tt><tt class="py-name">True</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Clusterer.getClusters-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Clusterer.getClusters-expanded"><a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">        <tt class="py-docstring">"""Returns clusters in image.</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">        <tt class="py-name">img</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method clustering.clusterer.Clusterer.__readImage()=clustering.clusterer.Clusterer-class.html#__readImage"><a title="clustering.clusterer.Clusterer.__readImage" class="py-name" href="#" onclick="return doclink('link-7', '__readImage', 'link-7');">__readImage</a></tt><tt class="py-op">(</tt><tt class="py-name">imagePath</tt><tt class="py-op">)</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">        <tt class="py-name">retval</tt><tt class="py-op">,</tt> <tt class="py-name">labels</tt><tt class="py-op">,</tt> <tt class="py-name">centers</tt> <tt class="py-op">=</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-8" class="py-name" targets="Method clustering.clusterer.Clusterer.__kmeans()=clustering.clusterer.Clusterer-class.html#__kmeans"><a title="clustering.clusterer.Clusterer.__kmeans" class="py-name" href="#" onclick="return doclink('link-8', '__kmeans', 'link-8');">__kmeans</a></tt><tt class="py-op">(</tt><tt class="py-name">img</tt><tt class="py-op">,</tt> <tt class="py-name">mode</tt><tt class="py-op">,</tt> <tt class="py-name">verbose</tt><tt class="py-op">)</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name" targets="Method clustering.clusterer.Clusterer.__getClustersImages()=clustering.clusterer.Clusterer-class.html#__getClustersImages"><a title="clustering.clusterer.Clusterer.__getClustersImages" class="py-name" href="#" onclick="return doclink('link-9', '__getClustersImages', 'link-9');">__getClustersImages</a></tt><tt class="py-op">(</tt><tt class="py-name">img</tt><tt class="py-op">,</tt> <tt class="py-name">labels</tt><tt class="py-op">,</tt> <tt class="py-name">backgroundColor</tt><tt class="py-op">,</tt> <tt class="py-name">verbose</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line"> </tt>
+<a name="Clusterer.__getClustersImages"></a><div id="Clusterer.__getClustersImages-def"><a name="L35"></a><tt class="py-lineno">35</tt> <a class="py-toggle" href="#" id="Clusterer.__getClustersImages-toggle" onclick="return toggle('Clusterer.__getClustersImages');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="clustering.clusterer.Clusterer-class.html#__getClustersImages">__getClustersImages</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">image</tt><tt class="py-op">,</tt> <tt class="py-param">labels</tt><tt class="py-op">,</tt> <tt class="py-param">backgroundColor</tt><tt class="py-op">,</tt> <tt class="py-param">verbose</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Clusterer.__getClustersImages-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Clusterer.__getClustersImages-expanded"><a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">        <tt class="py-docstring">"""Create clusters images from k-means results.</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">        <tt class="py-name">clusters</tt> <tt class="py-op">=</tt> <tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">        <tt class="py-keyword">for</tt> <tt class="py-name">i</tt> <tt class="py-keyword">in</tt> <tt class="py-name">xrange</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="clustering.clusterer.Clusterer.K" class="py-name" href="#" onclick="return doclink('link-10', 'K', 'link-2');">K</a></tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">            <tt class="py-keyword">if</tt> <tt class="py-name">verbose</tt><tt class="py-op">:</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">                <tt class="py-keyword">print</tt> <tt class="py-string">"Cluster {}..."</tt><tt class="py-op">.</tt><tt class="py-name">format</tt><tt class="py-op">(</tt><tt class="py-name">i</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">            <tt class="py-name">clusters</tt><tt class="py-op">.</tt><tt class="py-name">append</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Method clustering.clusterer.Clusterer.__getClusterImage()=clustering.clusterer.Clusterer-class.html#__getClusterImage"><a title="clustering.clusterer.Clusterer.__getClusterImage" class="py-name" href="#" onclick="return doclink('link-11', '__getClusterImage', 'link-11');">__getClusterImage</a></tt><tt class="py-op">(</tt><tt class="py-name">image</tt><tt class="py-op">,</tt> <tt class="py-name">labels</tt><tt class="py-op">,</tt> <tt class="py-name">i</tt><tt class="py-op">,</tt> <tt class="py-name">backgroundColor</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">verbose</tt><tt class="py-op">:</tt> </tt>
+<a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">            <tt class="py-keyword">print</tt> <tt class="py-string">"Calculation time: {:.3f} s"</tt><tt class="py-op">.</tt><tt class="py-name">format</tt><tt class="py-op">(</tt><tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">-</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__startTime</tt><tt class="py-op">)</tt> </tt>
+<a name="L45"></a><tt class="py-lineno">45</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">clusters</tt> </tt>
+</div><a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line"> </tt>
+<a name="Clusterer.__getClusterImage"></a><div id="Clusterer.__getClusterImage-def"><a name="L47"></a><tt class="py-lineno">47</tt> <a class="py-toggle" href="#" id="Clusterer.__getClusterImage-toggle" onclick="return toggle('Clusterer.__getClusterImage');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="clustering.clusterer.Clusterer-class.html#__getClusterImage">__getClusterImage</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">image</tt><tt class="py-op">,</tt> <tt class="py-param">labels</tt><tt class="py-op">,</tt> <tt class="py-param">clusterLabel</tt><tt class="py-op">,</tt> <tt class="py-param">bgColor</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Clusterer.__getClusterImage-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Clusterer.__getClusterImage-expanded"><a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line">        <tt class="py-docstring">"""Create a cluster image from k-means results.</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">        <tt class="py-name">cluster</tt> <tt class="py-op">=</tt> <tt class="py-name">np</tt><tt class="py-op">.</tt><tt class="py-name">copy</tt><tt class="py-op">(</tt><tt class="py-name">np</tt><tt class="py-op">.</tt><tt class="py-name">copy</tt><tt class="py-op">(</tt><tt class="py-name">image</tt><tt class="py-op">)</tt><tt class="py-op">.</tt><tt class="py-name">reshape</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">3</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">        <tt class="py-name">cond</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">labels</tt><tt class="py-op">.</tt><tt class="py-name">flatten</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> <tt class="py-op">==</tt> <tt class="py-name">clusterLabel</tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">        <tt class="py-name">cluster</tt> <tt class="py-op">=</tt> <tt class="py-name">np</tt><tt class="py-op">.</tt><tt class="py-name">uint8</tt><tt class="py-op">(</tt><tt class="py-name">np</tt><tt class="py-op">.</tt><tt class="py-name">where</tt><tt class="py-op">(</tt><tt class="py-name">zip</tt><tt class="py-op">(</tt><tt class="py-name">cond</tt><tt class="py-op">,</tt> <tt class="py-name">cond</tt><tt class="py-op">,</tt> <tt class="py-name">cond</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-name">cluster</tt><tt class="py-op">,</tt> <tt class="py-name">bgColor</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line"> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">cluster</tt><tt class="py-op">.</tt><tt class="py-name">reshape</tt><tt class="py-op">(</tt><tt class="py-name">image</tt><tt class="py-op">.</tt><tt class="py-name">shape</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line"> </tt>
+<a name="Clusterer.__kmeans"></a><div id="Clusterer.__kmeans-def"><a name="L56"></a><tt class="py-lineno">56</tt> <a class="py-toggle" href="#" id="Clusterer.__kmeans-toggle" onclick="return toggle('Clusterer.__kmeans');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="clustering.clusterer.Clusterer-class.html#__kmeans">__kmeans</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">image</tt><tt class="py-op">,</tt> <tt class="py-param">mode</tt><tt class="py-op">,</tt> <tt class="py-param">verbose</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Clusterer.__kmeans-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Clusterer.__kmeans-expanded"><a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line">        <tt class="py-docstring">"""Apply K-Means algorithm on image.</tt> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line">        <tt class="py-name">samples</tt> <tt class="py-op">=</tt> <tt class="py-name">np</tt><tt class="py-op">.</tt><tt class="py-name">float32</tt><tt class="py-op">(</tt><tt class="py-name">image</tt><tt class="py-op">.</tt><tt class="py-name">reshape</tt><tt class="py-op">(</tt><tt class="py-op">(</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">,</tt> <tt class="py-number">3</tt><tt class="py-op">)</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line">        <tt class="py-name">criteria</tt> <tt class="py-op">=</tt> <tt class="py-op">(</tt><tt class="py-name">cv2</tt><tt class="py-op">.</tt><tt class="py-name">TERM_CRITERIA_EPS</tt> <tt class="py-op">+</tt> <tt class="py-name">cv2</tt><tt class="py-op">.</tt><tt class="py-name">TERM_CRITERIA_MAX_ITER</tt><tt class="py-op">,</tt> <tt class="py-number">10</tt><tt class="py-op">,</tt> <tt class="py-number">1.0</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line"> </tt>
+<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">verbose</tt><tt class="py-op">:</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">__startTime</tt> <tt class="py-op">=</tt> <tt class="py-name">time</tt><tt class="py-op">.</tt><tt class="py-name">time</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">            <tt class="py-keyword">print</tt> <tt class="py-string">"K-Means computing..."</tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line"> </tt>
+<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">cv2</tt><tt class="py-op">.</tt><tt class="py-name">kmeans</tt><tt class="py-op">(</tt><tt class="py-name">samples</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name"><a title="clustering.clusterer.Clusterer.K" class="py-name" href="#" onclick="return doclink('link-12', 'K', 'link-2');">K</a></tt><tt class="py-op">,</tt> <tt class="py-name">criteria</tt><tt class="py-op">,</tt> <tt class="py-number">10</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="clustering.clusterer.Clusterer.__modes" class="py-name" href="#" onclick="return doclink('link-13', '__modes', 'link-3');">__modes</a></tt><tt class="py-op">[</tt><tt class="py-name">mode</tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line"> </tt>
+<a name="Clusterer.__readImage"></a><div id="Clusterer.__readImage-def"><a name="L68"></a><tt class="py-lineno">68</tt> <a class="py-toggle" href="#" id="Clusterer.__readImage-toggle" onclick="return toggle('Clusterer.__readImage');">-</a><tt class="py-line">    <tt class="py-keyword">def</tt> <a class="py-def-name" href="clustering.clusterer.Clusterer-class.html#__readImage">__readImage</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">,</tt> <tt class="py-param">path</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="Clusterer.__readImage-collapsed" style="display:none;" pad="++" indent="++++++++"></div><div id="Clusterer.__readImage-expanded"><a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line">        <tt class="py-docstring">"""Load image from path.</tt> </tt>
+<a name="L70"></a><tt class="py-lineno">70</tt>  <tt class="py-line"><tt class="py-docstring">        Raises OSError exception if path doesn't exist or is not an image.</tt> </tt>
+<a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">isfile</tt><tt class="py-op">(</tt><tt class="py-name">path</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">OSError</tt><tt class="py-op">(</tt><tt class="py-number">2</tt><tt class="py-op">,</tt> <tt class="py-string">'File not found'</tt><tt class="py-op">,</tt> <tt class="py-name">path</tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line">        <tt class="py-name">img</tt> <tt class="py-op">=</tt> <tt class="py-name">cv2</tt><tt class="py-op">.</tt><tt class="py-name">imread</tt><tt class="py-op">(</tt><tt class="py-name">path</tt><tt class="py-op">)</tt> </tt>
+<a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">img</tt> <tt class="py-keyword">is</tt> <tt class="py-name">None</tt><tt class="py-op">:</tt> </tt>
+<a name="L76"></a><tt class="py-lineno">76</tt>  <tt class="py-line">            <tt class="py-keyword">raise</tt> <tt class="py-name">OSError</tt><tt class="py-op">(</tt><tt class="py-number">2</tt><tt class="py-op">,</tt> <tt class="py-string">'File not an image'</tt><tt class="py-op">,</tt> <tt class="py-name">path</tt><tt class="py-op">)</tt> </tt>
+<a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line">        <tt class="py-keyword">return</tt> <tt class="py-name">img</tt> </tt>
+</div></div><a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="clustering-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            ><a class="navbar" target="_top" href="https://github.com/xsyann/ocr">OCR</a></th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1
+    on Thu May  8 22:42:39 2014
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>
