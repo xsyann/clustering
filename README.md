@@ -6,11 +6,12 @@ Image clustering using Python OpenCV
 
     git clone https://github.com/xsyann/clustering.git
 
-### Usage:
+### Usage
 
     python clustering.py images/beach.jpg images/land.jpg
     
+Use numeric keypad or arrows to navigate through clusters.
 
-### Requirements:
+### Requirements
   
     cv2, numpy
