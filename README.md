@@ -8,10 +8,11 @@ Image clustering using Python OpenCV
 
 ### Usage
 
-    python clustering.py images/beach.jpg images/land.jpg
+    python clustering.py
     
-Use numeric keypad or arrows to navigate through clusters.
 
 ### Requirements
   
-    cv2, numpy
+    cv2, numpy, matplotlib, pyqt5
+    
+![alt text](http://www.xsyann.com/epitech/clustering.png)
