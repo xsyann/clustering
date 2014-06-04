@@ -7,7 +7,7 @@
 ## Contact <contact@xsyann.com>
 ##
 ## Started on  Fri Apr 25 18:16:06 2014 xs_yann
-## Last update Tue Jun  3 22:33:22 2014 xs_yann
+## Last update Wed Jun  4 19:45:19 2014 xs_yann
 ##
 
 import os
@@ -25,17 +25,17 @@ class Graph:
         self.__points = []
         self.kmode = 0
 
-    def addElbow(self, point, d=None, h=None):
+    def addElbow(self, point):
         self.__points.append((point, d, h))
 
-    def addThreshold(self, point):
+    def add(self, point):
         self.__points.append(point)
 
-    def addFK(self, point):
-        self.__points.append(point)
+    def addGoal(self, point):
+        self.__goal = point
 
-    def addGapStat(self, point):
-        self.__points.append(point)
+    def addClosest(self, point):
+        self.__closest = point
 
     def addData(self, img, samples, labels, centers, orderedFeatures):
         self.__img = img
@@ -47,14 +47,17 @@ class Graph:
     def graph(self, figure, verbose):
         figure.clf()
         dataSubplot = 111
-        if self.kmode == Clusterer.KMODE_ELBOW:
-            dataSubplot = self.__graphElbow(figure)
-        elif self.kmode == Clusterer.KMODE_THRESHOLD:
-            dataSubplot = self.__graphThreshold(figure)
-        elif self.kmode == Clusterer.KMODE_GAPSTAT:
-            dataSubplot = self.__graphGapStat(figure)
-        elif self.kmode == Clusterer.KMODE_FK:
-            dataSubplot = self.__graphFK(figure)
+
+        kmodes = { Clusterer.KMODE_ELBOW: self.__graphElbow,
+                   Clusterer.KMODE_GAPSTAT: self.__graphGapStat,
+                   Clusterer.KMODE_THRESHOLD: self.__graphThreshold,
+                   Clusterer.KMODE_GAPTHRESHOLD: self.__graphGapThreshold,
+                   Clusterer.KMODE_SLIDER: self.__graphSlider,
+                   Clusterer.KMODE_FK: self.__graphFK }
+
+        if self.kmode in kmodes:
+            dataSubplot = kmodes[self.kmode](figure) # Graph K estimation
+
         self.__graphData(figure, self.__img, self.__samples,
                          self.__labels, self.__centers, self.__orderedFeatures,
                          dataSubplot, verbose)
@@ -114,7 +117,7 @@ class Graph:
         if not self.__points:
             return
         ax = figure.add_subplot(221)
-        ks, wks, ewks, sks = zip(*self.__points)
+        ks, wks, ewks, sks, gaps, delta = zip(*self.__points)
         ax.plot(ks, wks, linestyle='-', marker='o', c='b', label='observed')
         ax.plot(ks, ewks, linestyle='-', marker='o', c='r', label='estimated')
         ax.legend()
@@ -122,16 +125,12 @@ class Graph:
         ax.set_ylabel("Compactness")
 
         bx = figure.add_subplot(223)
-        gaps = [(ewk - wk) for (wk, ewk) in zip(wks, ewks)]
 
-        delta = np.zeros_like(gaps)
-        for i in xrange(1, len(gaps) - 1):
-            delta[i] = gaps[i] - (gaps[i + 1] - sks[i + 1])
-
-        ks, wks, ewks, sks = zip(*self.__points)
-        bx.plot(ks, gaps, linestyle='-', marker='o', c='b')
-        bx.bar(ks, delta, align='center', alpha=0.5, color='g')
-        bx.plot(ks, sks, linestyle='-', marker='o', c='y')
+        bx.plot(ks, gaps, linestyle='-', marker='o', c='b', label='gaps')
+        bx.bar(ks, delta, align='center', alpha=0.5, color='g', label='delta')
+        bx.plot(ks, sks, linestyle='-', marker='o', c='y', label='error')
+        bx.set_xlabel("Cluster count")
+        bx.set_ylabel("Gap")
         return 122
 
     def __graphThreshold(self, figure):
@@ -141,6 +140,42 @@ class Graph:
         ks, ts = zip(*(self.__points))
         ax.plot(ks, ts, linestyle='-', marker='o', c='g')
         ax.axhline(y=Clusterer.THRESHOLD, c='r')
+        plt.xlabel("Cluster count")
+        plt.ylabel("Compactness")
+        return 122
+
+    def __graphSlider(self, figure):
+        if not self.__points:
+            return
+        ax = figure.add_subplot(221)
+        ax.axis("equal")
+        ks, ts, dists = zip(*(self.__points))
+        ax.plot((0, 1), (1, 0), linestyle='-', marker='o', c='r')
+        ax.plot(ks, ts, linestyle='-', marker='o', c='g')
+        ax.plot([self.__closest[0], self.__goal[0]], [self.__closest[1], self.__goal[1]],
+                linestyle='-', marker='o', c='b')
+        ax.scatter(self.__goal[0], self.__goal[1], linestyle='-', marker='o', s=60, c='r')
+        plt.xlabel("Cluster count rate")
+        plt.ylabel("Compactness")
+
+        bx = figure.add_subplot(223)
+        ks = [(k * (Clusterer.K_MAX - Clusterer.K_MIN)) + Clusterer.K_MIN for k in ks]
+        bx.bar(ks, dists, alpha=.5, width=0.4, color='g', align='center')
+        best = min(dists[1:])
+        bx.axhline(y=best, c='r')
+        plt.xlabel("Cluster count")
+        plt.ylabel("Distance from goal")
+        return 122
+
+    def __graphGapThreshold(self, figure):
+        if not self.__points:
+            return
+        ax = figure.add_subplot(121)
+        ks, gaps, comps = zip(*(self.__points))
+        ax.plot(ks, comps, linestyle='-', marker='o', c='b')
+        ax.bar(ks, gaps, align='center', alpha=0.5, color='g', label='gap')
+        ax.axhline(y=Clusterer.GAP_THRESHOLD, c='r')
+        ax.legend()
         plt.xlabel("Cluster count")
         plt.ylabel("Compactness")
         return 122
@@ -201,14 +236,20 @@ class Clusterer:
 
     KMODE_ELBOW = 1
     KMODE_THRESHOLD = 2
-    KMODE_GAPSTAT = 3
-    KMODE_FK = 4
-    KMODE_USER = 5
+    KMODE_GAPTHRESHOLD = 3
+    KMODE_GAPSTAT = 4
+    KMODE_FK = 5
+    KMODE_SLIDER = 6
+    KMODE_USER = 7
 
     K_MIN = 1 # Minmum cluster count
     K_MAX = 12 # Maxium cluster count
 
+    K_LAST_ELBOW = 20
+    ALGO_OPTI = False
+
     THRESHOLD = 0.093
+    GAP_THRESHOLD = 0.093
 
 
     ########################################################
@@ -281,7 +322,7 @@ class Clusterer:
     def getDefaultKMode():
         """Return default mode.
         """
-        return Clusterer.KMODE_FK
+        return Clusterer.KMODE_GAPSTAT
 
     @staticmethod
     def getAllKModes():
@@ -405,8 +446,10 @@ class Clusterer:
 
     __kmodeNames = { KMODE_ELBOW: "Elbow",
                      KMODE_THRESHOLD: "Threshold",
+                     KMODE_GAPTHRESHOLD: "Gap Threshold",
                      KMODE_GAPSTAT: "Gap Statistic",
                      KMODE_FK: "f(K)",
+                     KMODE_SLIDER: "Slider",
                      KMODE_USER: "Custom" }
 
 
@@ -426,12 +469,13 @@ class Clusterer:
         self.__graph.graph(figure, verbose)
 
     def getClusters(self, imagePath, clusterCount=0, mode=KMEANS_PP, kmode=KMODE_FK, features=FEATURES_RGB,
-                    backgroundColor=(0, 0, 0), verbose=True):
+                    backgroundColor=(0, 0, 0), verbose=True, slider=None):
         """Returns clusters in image (clusterCount = 0 for automatic cluster count).
         """
         img = self.__readImage(imagePath)
         self.__startTime = time.time()
         self.__graph.kmode = kmode
+        self.__slider = slider
         if mode == self.KMEANS or mode == self.KMEANS_PP:
             if verbose:
                 print "K-Means computing..."
@@ -508,7 +552,7 @@ class Clusterer:
         return compactness
 
     def __rangeCompactness(self, compactness):
-        """Reduce the compactness in the range [0, 1].
+        """Reduce the compactness from [K_MIN, K_MAX] to the range [0, 1].
         """
         return (compactness - self.K_MIN) / (self.K_MAX - self.K_MIN)
 
@@ -517,26 +561,72 @@ class Clusterer:
         """
         firstCompactness = self.__computeKmeans(samples, self.K_MIN, mode, verbose)[0]
         baseCompactness = firstCompactness
-        firstCompactness = self.__reduceCompactness(firstCompactness, baseCompactness)
+        firstCompactness = self.__rangeCompactness(self.__reduceCompactness(firstCompactness, baseCompactness))
 
-        pFirst = np.float64(self.K_MIN), firstCompactness
+        pFirst = self.K_MIN, firstCompactness
 
-        t = self.__rangeCompactness(pFirst[1])
-        self.__graph.addThreshold((pFirst[0], t))
-        pPrev = pFirst
-        bestK = (0, 0)
+        self.__graph.addThreshold(pFirst)
+        bestK = 0
 
         for k in xrange(self.K_MIN + 1, self.K_MAX + 1):
             xCompactness = self.__computeKmeans(samples, k, mode, verbose)[0]
-            xCompactness = self.__reduceCompactness(xCompactness, baseCompactness)
-            pCurve = (np.float64(k), xCompactness)
-            t = self.__rangeCompactness(pCurve[1])
-            self.__graph.addThreshold((k, t))
-            pPrev = pCurve
-            if t < self.THRESHOLD:
-                bestK = (k, 0)
-                break
-        return bestK[0]
+            xCompactness = self.__rangeCompactness(self.__reduceCompactness(xCompactness, baseCompactness))
+            pCurve = (k, xCompactness)
+            self.__graph.addThreshold(pCurve)
+            if xCompactness < self.THRESHOLD and bestK == 0:
+                bestK = k
+                if self.ALGO_OPTI:
+                    break
+        return bestK
+
+    def __estimateKSlider(self, samples, mode, verbose):
+        """Estimate cluster count using threshold.
+        """
+        baseCompactness = 0
+        bestK = 0
+
+        pGoal = (self.__slider / 100.0, (100 - self.__slider) / 100.0)
+        self.__graph.addGoal(pGoal)
+
+        dists = []
+
+        for k in xrange(self.K_MIN, self.K_MAX + 1):
+            xCompactness = self.__computeKmeans(samples, k, mode, verbose)[0]
+            if baseCompactness == 0:
+                baseCompactness = xCompactness
+            xCompactness = self.__rangeCompactness(self.__reduceCompactness(xCompactness, baseCompactness))
+            pCurve = (self.__rangeCompactness(np.float64(k)), xCompactness)
+            dist = self.__distance(pCurve, pGoal)
+            self.__graph.add((pCurve[0], pCurve[1], dist))
+            dists.append((dist, k, pCurve))
+        best = min(dists[1:])
+        self.__graph.addClosest(best[2])
+        return best[1]
+
+    def __estimateKGapThreshold(self, samples, mode, verbose):
+        """Estimate cluster count using gap threshold.
+        """
+        firstCompactness = self.__computeKmeans(samples, self.K_MIN, mode, verbose)[0]
+        baseCompactness = firstCompactness
+        firstCompactness = self.__rangeCompactness(self.__reduceCompactness(firstCompactness, baseCompactness))
+
+        pFirst = self.K_MIN, firstCompactness
+
+        bestK = 0
+        prevCompactness = firstCompactness
+
+        for k in xrange(self.K_MIN + 1, self.K_MAX + 1):
+            xCompactness = self.__computeKmeans(samples, k, mode, verbose)[0]
+            xCompactness = self.__rangeCompactness(self.__reduceCompactness(xCompactness, baseCompactness))
+            pCurve = (k, xCompactness)
+            gap = prevCompactness - xCompactness
+            self.__graph.add((k - 1, gap, prevCompactness))
+            prevCompactness = xCompactness
+            if gap < self.GAP_THRESHOLD and bestK == 0:
+                bestK = k - 1
+                if self.ALGO_OPTI:
+                    break
+        return bestK
 
     def __estimateKFK(self, samples, mode, verbose):
         """Estimate cluster count using f(K).
@@ -556,10 +646,10 @@ class Clusterer:
 
         fs = np.zeros(self.K_MAX - self.K_MIN)
         fs[0], sk = fK(samples, 1)
-        self.__graph.addFK((1, fs[0]))
+        self.__graph.add((1, fs[0]))
         for i, k in enumerate(xrange(self.K_MIN + 1, self.K_MAX)):
             fs[i + 1], sk = fK(samples, k, sk)
-            self.__graph.addFK((k, fs[i + 1]))
+            self.__graph.add((k, fs[i + 1]))
         return (np.where(fs == min(fs))[0][0] + 1)
 
     def __wk(self, samples, centers, labels):
@@ -569,15 +659,15 @@ class Clusterer:
         k = len(ulabels)
         clusters = []
         for i in xrange(k):
-            cluster = samples[(labels.flatten() == ulabels[i])]
+            cluster = np.float64(samples[(labels.flatten() == ulabels[i])])
             clusters.append(cluster)
-        return sum([(np.linalg.norm(centers[i] - c) ** 2) / (2 * len(c)) \
-                    for i in range(k) for c in clusters[i]])
+        return np.sum([(np.linalg.norm(centers[i] - c) ** 2) / (2.0 * c.shape[0]) \
+                    for i in xrange(k) for c in clusters[i]])
 
     def __estimateKGapStat(self, samples, mode, verbose):
         """Estimate cluster count using gap statistic.
         """
-        refCount = 3
+        refCount = 5
         sampleCount, featureCount = samples.shape
         mins = samples.min(axis=0)
         maxs = samples.max(axis=0)
@@ -585,19 +675,34 @@ class Clusterer:
         rands = np.float32(np.random.random_sample(size=(sampleCount, featureCount, refCount)))
         for i in range(refCount):
             rands[:,:,i] = rands[:,:,i] * dists + mins
-        for (i, k) in enumerate(xrange(self.K_MIN, self.K_MAX + 1)):
+        baseCompactness = None
+        wkPrev, ewkPrev, skPrev = 0, 0, 0
+        bestK = 0
+        for (i, k) in enumerate(xrange(max(self.K_MIN, 2), self.K_MAX + 1)):
             compactness, labels, centers = self.__computeKmeans(samples, k, mode, verbose)
+            baseCompactness = compactness if not baseCompactness else baseCompactness
+            compactness = self.__reduceCompactness(compactness, baseCompactness)
             #compactness = self.__wk(samples, centers, labels)
             refCompactness = np.zeros((rands.shape[2],))
             for j in xrange(rands.shape[2]):
                 refCompactness[j], labels, centers = self.__computeKmeans(rands[:,:,j], k, mode, verbose)
                 #refCompactness[j] = self.__wk(rands[:,:,j], centers, labels)
-                refCompactness[j] = np.log(refCompactness[j])
-            wk = np.log(compactness)
+                refCompactness[j] = self.__reduceCompactness(refCompactness[j], baseCompactness)
+                #refCompactness[j] = np.log(refCompactness[j])
+            wk = compactness #np.log(compactness)
             ewk = np.mean(refCompactness)
             sk = np.std(refCompactness) * np.sqrt(1 + 1 / refCount)
-            self.__graph.addGapStat((k, wk, ewk, sk))
-        return 3
+            delta = ((ewkPrev - wkPrev) - ((ewk - wk) - sk))
+            if i >= 1:
+                self.__graph.add((k - 1, wkPrev, ewkPrev, skPrev,
+                                         (ewkPrev - wkPrev), delta))
+                if delta > 0 and bestK == 0:
+                    bestK = k - 1
+                    if self.ALGO_OPTI:
+                        self.__graph.add((k, wk, ewk, sk, 0, 0))
+                        break
+            wkPrev, ewkPrev, skPrev = wk, ewk, sk
+        return bestK
 
     def __estimateKElbow(self, samples, mode, verbose):
         """Estimate cluster count using elbow.
@@ -606,15 +711,17 @@ class Clusterer:
         baseCompactness = firstCompactness
         firstCompactness = self.__reduceCompactness(firstCompactness, baseCompactness)
 
-        lastCompactness = self.__computeKmeans(samples, self.K_MAX, mode, verbose)[0]
+        lastCompactness = self.__computeKmeans(samples, self.K_LAST_ELBOW, mode, verbose)[0]
         lastCompactness = self.__reduceCompactness(lastCompactness, baseCompactness)
 
         pFirst = np.float64(self.K_MIN), firstCompactness
-        pLast = np.float64(self.K_MAX), lastCompactness
+        pLast = np.float64(self.K_LAST_ELBOW), lastCompactness
 
         m, p = self.__linearEquation(pFirst, pLast)
         self.__graph.addElbow(pFirst)
         bestK = (0, 0)
+
+        found = False
 
         for k in xrange(self.K_MIN + 1, self.K_MAX):
             xCompactness = self.__computeKmeans(samples, k, mode, verbose)[0]
@@ -632,9 +739,10 @@ class Clusterer:
             dist = np.sqrt((a ** 2) - (d ** 2))
             h = (pFirst[0] + nvdir[0] * dist, pFirst[1] + nvdir[1] * dist)
             self.__graph.addElbow(pCurve, d=d, h=h)
-            if (d >= bestK[1]):
+            if (d >= bestK[1] and not found):
                 bestK = int(pCurve[0]), d
-            else:
+            elif self.ALGO_OPTI:
+                found = True
                 break
         self.__graph.addElbow(pLast)
         return bestK[0]
@@ -646,6 +754,8 @@ class Clusterer:
         kmodes = { self.KMODE_ELBOW: self.__estimateKElbow,
                    self.KMODE_THRESHOLD: self.__estimateKThreshold,
                    self.KMODE_GAPSTAT: self.__estimateKGapStat,
+                   self.KMODE_GAPTHRESHOLD: self.__estimateKGapThreshold,
+                   self.KMODE_SLIDER: self.__estimateKSlider,
                    self.KMODE_FK: self.__estimateKFK }
         if kmode in kmodes:
             k = kmodes[kmode](samples, mode, verbose)

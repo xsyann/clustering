@@ -7,7 +7,7 @@
 ## Contact <contact@xsyann.com>
 ##
 ## Started on  Fri Apr 25 18:16:06 2014 xs_yann
-## Last update Tue Jun  3 22:31:33 2014 xs_yann
+## Last update Wed Jun  4 19:42:54 2014 xs_yann
 ##
 
 import sys
@@ -21,7 +21,7 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QFileDialog, QPushButton,
                              QSpinBox, QCheckBox, QHBoxLayout, QVBoxLayout,
                              QLabel, QLineEdit, QListWidget, QComboBox, QScrollArea,
                              QSplitter, QGroupBox, QTextEdit, QDesktopWidget,
-                             QFrame, QColorDialog, QSizePolicy)
+                             QFrame, QColorDialog, QSizePolicy, QSlider)
 from PyQt5.QtGui import QPixmap
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
@@ -64,7 +64,8 @@ class ClustererThread(QtCore.QThread):
                                                              kmode=modeK,
                                                              clusterCount=k,
                                                              features=features,
-                                                             backgroundColor=backgroundColor)
+                                                             backgroundColor=backgroundColor,
+                                                             slider=self.mw.clusterSlider.value())
             self.mw.currentCluster = 0
             self.mw.refreshCluster()
             self.mw.saveButton.setEnabled(True)
@@ -156,6 +157,7 @@ class Window(QWidget):
     def refreshCluster(self):
         """Redraw image area with current cluster.
         """
+        self.clusterCountLabel.setText(str(len(self.clusters)) + self.tr(' Clusters'))
         pixmap = self.np2Qt(self.clusters[self.currentCluster])
         pixmap = self.fitImageToScreen(pixmap)
         checkerboard = self.checkerboard(pixmap.size())
@@ -251,6 +253,11 @@ class Window(QWidget):
         else:
             self.clusterCount.hide()
 
+        if mode == Clusterer.KMODE_SLIDER:
+            self.clusterSliderWidget.show()
+        else:
+            self.clusterSliderWidget.hide()
+
     def toggleDebugInfo(self, pressed):
         """Toggle debug infos widget.
         """
@@ -284,9 +291,14 @@ class Window(QWidget):
         is going to be collapsed.
         """
         focusedWidget = QApplication.focusWidget()
-        #if isinstance(focusedWidget, QListWidget):
         if focusedWidget:
             focusedWidget.clearFocus()
+
+    def sliderMoved(self, value):
+        """Set correct labels when slider moved.
+        """
+        self.clusterSliderLabel.setText('(' + str(100 - value) + '%)')
+        self.compactnessSliderLabel.setText('(' + str(value) + '%)')
 
     ########################################################
     # Widgets
@@ -299,7 +311,7 @@ class Window(QWidget):
         sourcePathLabel = QLabel(self)
         sourcePathLabel.setText(self.tr('Source'))
         self.sourcePathField = QLineEdit(self)
-        self.sourcePathField.setText('images/beach.jpg')
+        self.sourcePathField.setText('images/small1.png')
         sourcePathButton = QPushButton('...')
         sourcePathButton.clicked.connect(self.loadImage)
         hbox.addWidget(sourcePathLabel)
@@ -338,7 +350,15 @@ class Window(QWidget):
         imageArea.addWidget(prev)
         imageArea.addWidget(scroll)
         imageArea.addWidget(next)
-        return imageArea
+
+        vbox = QVBoxLayout()
+        self.clusterCountLabel = QLabel(self)
+        self.clusterCountLabel.setAlignment(QtCore.Qt.AlignCenter)
+        f = QtGui.QFont('Arial', 14, QtGui.QFont.Bold);
+        self.clusterCountLabel.setFont(f)
+        vbox.addWidget(self.clusterCountLabel)
+        vbox.addLayout(imageArea)
+        return vbox
 
     def widgetFeatureList(self):
         """Create the features pair list widget.
@@ -385,8 +405,33 @@ class Window(QWidget):
         self.clusterCount = QSpinBox(self)
         self.clusterCount.setValue(2)
         self.clusterCount.setMinimum(1)
-
         self.modeK = QComboBox(self)
+
+        hcluster = QHBoxLayout()
+        hcluster.addWidget(QLabel(self.tr('Cluster count:')))
+        hcluster.addWidget(self.modeK)
+        hcluster.addWidget(self.clusterCount)
+
+        # Slider
+        hslider = QHBoxLayout()
+        clusterLabel = QLabel(self.tr('Cluster count'))
+        self.clusterSliderLabel = QLabel()
+        compactnessLabel = QLabel(self.tr('Compactness'))
+        self.compactnessSliderLabel = QLabel()
+        self.clusterSlider = QSlider(QtCore.Qt.Horizontal)
+        self.clusterSlider.valueChanged[int].connect(self.sliderMoved)
+        self.clusterSlider.setMinimumWidth(100)
+        self.clusterSlider.setValue(50)
+        self.clusterSlider.setMaximum(100)
+        hslider.addWidget(clusterLabel)
+        hslider.addWidget(self.clusterSliderLabel)
+        hslider.addWidget(self.clusterSlider)
+        hslider.addWidget(compactnessLabel)
+        hslider.addWidget(self.compactnessSliderLabel)
+        self.clusterSliderWidget = QWidget()
+        self.clusterSliderWidget.setLayout(hslider)
+
+        # Set default mode
         self.modeK.currentIndexChanged.connect(self.toggleClusterCount)
         default = Clusterer.getDefaultKMode()
         defaultIndex = 0
@@ -395,11 +440,6 @@ class Window(QWidget):
                 defaultIndex = i
             self.modeK.addItem(name)
         self.modeK.setCurrentIndex(defaultIndex)
-
-        hcluster = QHBoxLayout()
-        hcluster.addWidget(QLabel(self.tr('Cluster count:')))
-        hcluster.addWidget(self.modeK)
-        hcluster.addWidget(self.clusterCount)
 
         # Algo
         combo = QComboBox(self)
@@ -438,6 +478,7 @@ class Window(QWidget):
         paramBox = QGroupBox(self.tr('Parameters'))
         paramLayout = QVBoxLayout()
         paramLayout.addLayout(hcluster)
+        paramLayout.addWidget(self.clusterSliderWidget)
         paramLayout.addLayout(halgo)
         paramLayout.addLayout(hbg)
         paramBox.setLayout(paramLayout)
