@@ -7,7 +7,7 @@
 ## Contact <contact@xsyann.com>
 ##
 ## Started on  Fri Apr 25 18:16:06 2014 xs_yann
-## Last update Thu Jun  5 14:39:17 2014 xs_yann
+## Last update Thu Jun  5 14:55:46 2014 xs_yann
 ##
 
 import os
@@ -541,7 +541,7 @@ class Window(QWidget):
         scrollContents.setLayout(scrollLayout)
         scroll.setWidget(scrollContents)
 
-        self.detailsScroll = scrollContents
+        self.detailsScroll = scroll
 
         self.canvas.setMinimumSize(self.canvas.size())
         self.toggleDebugInfo(True)

@@ -7,7 +7,7 @@
 ## Contact <contact@xsyann.com>
 ##
 ## Started on  Fri Apr 25 18:16:06 2014 xs_yann
-## Last update Thu Jun  5 13:52:03 2014 xs_yann
+## Last update Thu Jun  5 14:50:15 2014 xs_yann
 ##
 
 import os
@@ -26,7 +26,7 @@ class Graph:
         self.__points = []
         self.kmode = 0
 
-    def addElbow(self, point):
+    def addElbow(self, point, d=None, h=None):
         self.__points.append((point, d, h))
 
     def add(self, point):
@@ -247,7 +247,7 @@ class Clusterer:
     K_MAX = 12 # Maxium cluster count
 
     K_LAST_ELBOW = 20
-    ALGO_OPTI = False
+    ALGO_OPTI = True
 
     THRESHOLD = 0.093
     GAP_THRESHOLD = 0.093
@@ -323,7 +323,7 @@ class Clusterer:
     def getDefaultKMode():
         """Return default mode.
         """
-        return Clusterer.KMODE_GAPSTAT
+        return Clusterer.KMODE_FK
 
     @staticmethod
     def getAllKModes():
