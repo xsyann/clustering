@@ -7,7 +7,7 @@
 ## Contact <contact@xsyann.com>
 ##
 ## Started on  Fri Apr 25 18:16:06 2014 xs_yann
-## Last update Wed Jun  4 19:45:19 2014 xs_yann
+## Last update Thu Jun  5 13:52:03 2014 xs_yann
 ##
 
 import os
@@ -15,6 +15,7 @@ import time
 import numpy as np
 import cv2
 import matplotlib
+import urllib2
 from voronoi import voronoi
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -340,6 +341,26 @@ class Clusterer:
                 return mode
         return 0
 
+    @staticmethod
+    def readImage(path):
+        """Load image from path.
+        Raises OSError exception if path doesn't exist or is not an image.
+        """
+        img = None
+        if not os.path.isfile(path):
+            try:
+                req = urllib2.urlopen(path)
+                arr = np.asarray(bytearray(req.read()), dtype=np.uint8)
+                img = cv2.imdecode(arr, cv2.CV_LOAD_IMAGE_COLOR)
+            except ValueError:
+                raise OSError(2, 'File not found', path)
+        else:
+            img = cv2.imread(path)
+        if img is None:
+            raise OSError(2, 'File not recognized', path)
+        return img
+
+
     ########################################################
     # Private static methods
 
@@ -472,7 +493,7 @@ class Clusterer:
                     backgroundColor=(0, 0, 0), verbose=True, slider=None):
         """Returns clusters in image (clusterCount = 0 for automatic cluster count).
         """
-        img = self.__readImage(imagePath)
+        img = Clusterer.readImage(imagePath)
         self.__startTime = time.time()
         self.__graph.kmode = kmode
         self.__slider = slider
@@ -565,14 +586,14 @@ class Clusterer:
 
         pFirst = self.K_MIN, firstCompactness
 
-        self.__graph.addThreshold(pFirst)
+        self.__graph.add(pFirst)
         bestK = 0
 
         for k in xrange(self.K_MIN + 1, self.K_MAX + 1):
             xCompactness = self.__computeKmeans(samples, k, mode, verbose)[0]
             xCompactness = self.__rangeCompactness(self.__reduceCompactness(xCompactness, baseCompactness))
             pCurve = (k, xCompactness)
-            self.__graph.addThreshold(pCurve)
+            self.__graph.add(pCurve)
             if xCompactness < self.THRESHOLD and bestK == 0:
                 bestK = k
                 if self.ALGO_OPTI:
@@ -809,14 +830,3 @@ class Clusterer:
         """Return True if at least one item in components is in flags.
         """
         return sum([flags & f for f in components]) > 0
-
-    def __readImage(self, path):
-        """Load image from path.
-        Raises OSError exception if path doesn't exist or is not an image.
-        """
-        if not os.path.isfile(path):
-            raise OSError(2, 'File not found', path)
-        img = cv2.imread(path)
-        if img is None:
-            raise OSError(2, 'File not an image', path)
-        return img

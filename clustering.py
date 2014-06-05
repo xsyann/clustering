@@ -7,7 +7,7 @@
 ## Contact <contact@xsyann.com>
 ##
 ## Started on  Fri Apr 25 18:16:06 2014 xs_yann
-## Last update Wed Jun  4 19:42:54 2014 xs_yann
+## Last update Thu Jun  5 13:50:45 2014 xs_yann
 ##
 
 import sys
@@ -15,6 +15,7 @@ import os
 import cv2
 import numpy as np
 import clusterer
+import urllib2
 from clusterer import Clusterer
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import (QApplication, QWidget, QFileDialog, QPushButton,
@@ -44,21 +45,23 @@ class ClustererThread(QtCore.QThread):
         if not path:
             print "[Error] File path is empty"
             return
-        features = self.mw.selectedFeatures
-        if not features:
-            return
-        pixmap = QPixmap(path)
-        self.mw.clusterer = Clusterer()
-        backgroundColor = self.mw.backgroundColor
-        backgroundColor = backgroundColor.blue(), backgroundColor.green(), backgroundColor.red()
-        if self.mw.transparentBg.isChecked():
-            backgroundColor = None
-        mode = self.mw.modeCombo.itemText(self.mw.modeCombo.currentIndex())
-        mode = Clusterer.getModeByName(mode)
-        modeK = self.mw.modeK.itemText(self.mw.modeK.currentIndex())
-        modeK = Clusterer.getKModeByName(modeK)
-        k = self.mw.clusterCount.value()
         try:
+            img = Clusterer.readImage(path)
+            imageBGRA = cv2.cvtColor(img, cv2.cv.CV_BGR2BGRA)
+            self.mw.refreshSource(imageBGRA)
+            features = self.mw.selectedFeatures
+            if not features:
+                return
+            self.mw.clusterer = Clusterer()
+            backgroundColor = self.mw.backgroundColor
+            backgroundColor = backgroundColor.blue(), backgroundColor.green(), backgroundColor.red()
+            if self.mw.transparentBg.isChecked():
+                backgroundColor = None
+            mode = self.mw.modeCombo.itemText(self.mw.modeCombo.currentIndex())
+            mode = Clusterer.getModeByName(mode)
+            modeK = self.mw.modeK.itemText(self.mw.modeK.currentIndex())
+            modeK = Clusterer.getKModeByName(modeK)
+            k = self.mw.clusterCount.value()
             self.mw.runButton.setEnabled(False)
             self.mw.clusters = self.mw.clusterer.getClusters(path, mode=mode,
                                                              kmode=modeK,
@@ -74,7 +77,7 @@ class ClustererThread(QtCore.QThread):
             self.mw.canvas.setMinimumSize(self.mw.canvas.size())
             self.mw.canvas.draw()
 
-        except (OSError, cv2.error) as err:
+        except (OSError, cv2.error, urllib2.HTTPError) as err:
             print err
         self.mw.runButton.setEnabled(True)
 
@@ -154,11 +157,10 @@ class Window(QWidget):
         border-radius: 2px; border-color: black; border-style: outset; }'
         colorPicker.setStyleSheet(css % color.name())
 
-    def refreshCluster(self):
-        """Redraw image area with current cluster.
+    def refreshSource(self, img):
+        """Display source image.
         """
-        self.clusterCountLabel.setText(str(len(self.clusters)) + self.tr(' Clusters'))
-        pixmap = self.np2Qt(self.clusters[self.currentCluster])
+        pixmap = self.np2Qt(img)
         pixmap = self.fitImageToScreen(pixmap)
         checkerboard = self.checkerboard(pixmap.size())
 
@@ -169,6 +171,13 @@ class Window(QWidget):
 
         self.imageLabel.setPixmap(checkerboard)
         self.imageLabel.setFixedSize(pixmap.size())
+
+
+    def refreshCluster(self):
+        """Redraw image area with current cluster.
+        """
+        self.clusterCountLabel.setText(str(len(self.clusters)) + self.tr(' Clusters'))
+        self.refreshSource(self.clusters[self.currentCluster])
 
     ########################################################
     # Signal handlers
@@ -311,7 +320,7 @@ class Window(QWidget):
         sourcePathLabel = QLabel(self)
         sourcePathLabel.setText(self.tr('Source'))
         self.sourcePathField = QLineEdit(self)
-        self.sourcePathField.setText('images/small1.png')
+        self.sourcePathField.setText('images/beach.jpg')
         sourcePathButton = QPushButton('...')
         sourcePathButton.clicked.connect(self.loadImage)
         hbox.addWidget(sourcePathLabel)
