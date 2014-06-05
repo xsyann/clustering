@@ -7,11 +7,13 @@
 ## Contact <contact@xsyann.com>
 ##
 ## Started on  Fri Apr 25 18:16:06 2014 xs_yann
-## Last update Thu Jun  5 13:50:45 2014 xs_yann
+## Last update Thu Jun  5 14:39:17 2014 xs_yann
 ##
 
-import sys
 import os
+os.environ["QT_API"] = "pyqt5"
+
+import sys
 import cv2
 import numpy as np
 import clusterer
@@ -591,6 +593,7 @@ def main():
 
     main = Window()
     main.setWindowTitle('Clustering')
+    main.setWindowIcon(QtGui.QIcon('icon.png'))
     main.show()
     try:
         sys.exit(app.exec_())

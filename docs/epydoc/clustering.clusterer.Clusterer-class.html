@@ -323,10 +323,11 @@
         <span class="summary-sig-arg">imagePath</span>,
         <span class="summary-sig-arg">clusterCount</span>=<span class="summary-sig-default">0</span>,
         <span class="summary-sig-arg">mode</span>=<span class="summary-sig-default">2</span>,
-        <span class="summary-sig-arg">kmode</span>=<span class="summary-sig-default">4</span>,
+        <span class="summary-sig-arg">kmode</span>=<span class="summary-sig-default">5</span>,
         <span class="summary-sig-arg">features</span>=<span class="summary-sig-default">7</span>,
         <span class="summary-sig-arg">backgroundColor</span>=<span class="summary-sig-default"><code class="variable-group">(</code>0<code class="variable-op">, </code>0<code class="variable-op">, </code>0<code class="variable-group">)</code></span>,
-        <span class="summary-sig-arg">verbose</span>=<span class="summary-sig-default">True</span>)</span><br />
+        <span class="summary-sig-arg">verbose</span>=<span class="summary-sig-default">True</span>,
+        <span class="summary-sig-arg">slider</span>=<span class="summary-sig-default">None</span>)</span><br />
       Returns clusters in image (clusterCount = 0 for automatic cluster 
       count).</td>
           <td align="right" valign="top">
@@ -467,7 +468,7 @@
         <tr>
           <td><span class="summary-sig"><a name="__rangeCompactness"></a><span class="summary-sig-name">__rangeCompactness</span>(<span class="summary-sig-arg">self</span>,
         <span class="summary-sig-arg">compactness</span>)</span><br />
-      Reduce the compactness in the range [0, 1].</td>
+      Reduce the compactness from [K_MIN, K_MAX] to the range [0, 1].</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="clustering.clusterer-pysrc.html#Clusterer.__rangeCompactness">source&nbsp;code</a></span>
             
@@ -490,6 +491,46 @@
       Estimate cluster count using threshold.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="clustering.clusterer-pysrc.html#Clusterer.__estimateKThreshold">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__estimateKSlider"></a><span class="summary-sig-name">__estimateKSlider</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">samples</span>,
+        <span class="summary-sig-arg">mode</span>,
+        <span class="summary-sig-arg">verbose</span>)</span><br />
+      Estimate cluster count using threshold.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="clustering.clusterer-pysrc.html#Clusterer.__estimateKSlider">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
+<tr class="private">
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a name="__estimateKGapThreshold"></a><span class="summary-sig-name">__estimateKGapThreshold</span>(<span class="summary-sig-arg">self</span>,
+        <span class="summary-sig-arg">samples</span>,
+        <span class="summary-sig-arg">mode</span>,
+        <span class="summary-sig-arg">verbose</span>)</span><br />
+      Estimate cluster count using gap threshold.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="clustering.clusterer-pysrc.html#Clusterer.__estimateKGapThreshold">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -652,24 +693,6 @@
       Return True if at least one item in components is in flags.</td>
           <td align="right" valign="top">
             <span class="codelink"><a href="clustering.clusterer-pysrc.html#Clusterer.__hasComponent">source&nbsp;code</a></span>
-            
-          </td>
-        </tr>
-      </table>
-      
-    </td>
-  </tr>
-<tr class="private">
-    <td width="15%" align="right" valign="top" class="summary">
-      <span class="summary-type">&nbsp;</span>
-    </td><td class="summary">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
-        <tr>
-          <td><span class="summary-sig"><a href="clustering.clusterer.Clusterer-class.html#__readImage" class="summary-sig-name" onclick="show_private();">__readImage</a>(<span class="summary-sig-arg">self</span>,
-        <span class="summary-sig-arg">path</span>)</span><br />
-      Load image from path.</td>
-          <td align="right" valign="top">
-            <span class="codelink"><a href="clustering.clusterer-pysrc.html#Clusterer.__readImage">source&nbsp;code</a></span>
             
           </td>
         </tr>
@@ -882,6 +905,23 @@
       
     </td>
   </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr>
+          <td><span class="summary-sig"><a href="clustering.clusterer.Clusterer-class.html#readImage" class="summary-sig-name">readImage</a>(<span class="summary-sig-arg">path</span>)</span><br />
+      Load image from path.</td>
+          <td align="right" valign="top">
+            <span class="codelink"><a href="clustering.clusterer-pysrc.html#Clusterer.readImage">source&nbsp;code</a></span>
+            
+          </td>
+        </tr>
+      </table>
+      
+    </td>
+  </tr>
 </table>
 <!-- ==================== CLASS VARIABLES ==================== -->
 <a name="section-ClassVariables"></a>
@@ -1051,21 +1091,35 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="KMODE_GAPSTAT"></a><span class="summary-name">KMODE_GAPSTAT</span> = <code title="3">3</code>
+        <a name="KMODE_GAPTHRESHOLD"></a><span class="summary-name">KMODE_GAPTHRESHOLD</span> = <code title="3">3</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="KMODE_FK"></a><span class="summary-name">KMODE_FK</span> = <code title="4">4</code>
+        <a name="KMODE_GAPSTAT"></a><span class="summary-name">KMODE_GAPSTAT</span> = <code title="4">4</code>
     </td>
   </tr>
 <tr>
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a name="KMODE_USER"></a><span class="summary-name">KMODE_USER</span> = <code title="5">5</code>
+        <a name="KMODE_FK"></a><span class="summary-name">KMODE_FK</span> = <code title="5">5</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="KMODE_SLIDER"></a><span class="summary-name">KMODE_SLIDER</span> = <code title="6">6</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="KMODE_USER"></a><span class="summary-name">KMODE_USER</span> = <code title="7">7</code>
     </td>
   </tr>
 <tr>
@@ -1086,7 +1140,28 @@
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
+        <a name="K_LAST_ELBOW"></a><span class="summary-name">K_LAST_ELBOW</span> = <code title="20">20</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="ALGO_OPTI"></a><span class="summary-name">ALGO_OPTI</span> = <code title="False">False</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
         <a name="THRESHOLD"></a><span class="summary-name">THRESHOLD</span> = <code title="0.093">0.093</code>
+    </td>
+  </tr>
+<tr>
+    <td width="15%" align="right" valign="top" class="summary">
+      <span class="summary-type">&nbsp;</span>
+    </td><td class="summary">
+        <a name="GAP_THRESHOLD"></a><span class="summary-name">GAP_THRESHOLD</span> = <code title="0.093">0.093</code>
     </td>
   </tr>
 <tr class="private">
@@ -1095,12 +1170,12 @@
     </td><td class="summary">
         <a href="clustering.clusterer.Clusterer-class.html#__featuresTable" class="summary-name" onclick="show_private();">__featuresTable</a> = <code title="[((1, 2, 4),
   ('Red', 'Green', 'Blue'),
-  &lt;function __computeRGB at 0x1139889b0&gt;,
-  &lt;function __tableRGB at 0x113988a28&gt;),
+  &lt;function __computeRGB at 0x10d1b7b18&gt;,
+  &lt;function __tableRGB at 0x10d1b7b90&gt;),
  ((8, 16, 32),
   ('Hue', 'Saturation', 'Value'),
-  &lt;function __computeHSV at 0x113988aa0&gt;,
-  &lt;function __tableHSV at 0x113988b18&gt;),
+  &lt;function __computeHSV at 0x10d1b7c08&gt;,
+  &lt;function __tableHSV at 0x10d1b7c80&gt;),
 ..."><code class="variable-group">[</code><code class="variable-group">(</code><code class="variable-group">(</code>1<code class="variable-op">, </code>2<code class="variable-op">, </code>4<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">Red</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">Green</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">Blue</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">, </code>&lt;func<code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
@@ -1117,9 +1192,11 @@
     </td><td class="summary">
         <a href="clustering.clusterer.Clusterer-class.html#__kmodeNames" class="summary-name" onclick="show_private();">__kmodeNames</a> = <code title="{1: 'Elbow',
  2: 'Threshold',
- 3: 'Gap Statistic',
- 4: 'f(K)',
- 5: 'Custom'}"><code class="variable-group">{</code>1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Elbow</code><code class="variable-quote">'</code><code class="variable-op">, </code>2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Threshold</code><code class="variable-quote">'</code><code class="variable-op">, </code>3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Gap Statistic</code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
+ 3: 'Gap Threshold',
+ 4: 'Gap Statistic',
+ 5: 'f(K)',
+ 6: 'Slider',
+ 7: 'Custom'}"><code class="variable-group">{</code>1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Elbow</code><code class="variable-quote">'</code><code class="variable-op">, </code>2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Threshold</code><code class="variable-quote">'</code><code class="variable-op">, </code>3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Gap Threshold</code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr class="private">
@@ -1148,18 +1225,18 @@
   </td>
 </tr>
 </table>
-<a name="__readImage"></a>
-<div class="private">
+<a name="readImage"></a>
+<div>
 <table class="details" border="1" cellpadding="3"
        cellspacing="0" width="100%" bgcolor="white">
 <tr><td>
   <table width="100%" cellpadding="0" cellspacing="0" border="0">
   <tr valign="top"><td>
-  <h3 class="epydoc"><span class="sig"><span class="sig-name">__readImage</span>(<span class="sig-arg">self</span>,
-        <span class="sig-arg">path</span>)</span>
+  <h3 class="epydoc"><span class="sig"><span class="sig-name">readImage</span>(<span class="sig-arg">path</span>)</span>
+    <br /><em class="fname">Static Method</em>
   </h3>
   </td><td align="right" valign="top"
-    ><span class="codelink"><a href="clustering.clusterer-pysrc.html#Clusterer.__readImage">source&nbsp;code</a></span>&nbsp;
+    ><span class="codelink"><a href="clustering.clusterer-pysrc.html#Clusterer.readImage">source&nbsp;code</a></span>&nbsp;
     </td>
   </tr></table>
   
@@ -1202,12 +1279,12 @@
       <dd><table><tr><td><pre class="variable">
 <code class="variable-group">[</code><code class="variable-group">(</code><code class="variable-group">(</code>1<code class="variable-op">, </code>2<code class="variable-op">, </code>4<code class="variable-group">)</code><code class="variable-op">,</code>
   <code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">Red</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">Green</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">Blue</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
-  &lt;function __computeRGB at 0x1139889b0&gt;<code class="variable-op">,</code>
-  &lt;function __tableRGB at 0x113988a28&gt;<code class="variable-group">)</code><code class="variable-op">,</code>
+  &lt;function __computeRGB at 0x10d1b7b18&gt;<code class="variable-op">,</code>
+  &lt;function __tableRGB at 0x10d1b7b90&gt;<code class="variable-group">)</code><code class="variable-op">,</code>
  <code class="variable-group">(</code><code class="variable-group">(</code>8<code class="variable-op">, </code>16<code class="variable-op">, </code>32<code class="variable-group">)</code><code class="variable-op">,</code>
   <code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">Hue</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">Saturation</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">Value</code><code class="variable-quote">'</code><code class="variable-group">)</code><code class="variable-op">,</code>
-  &lt;function __computeHSV at 0x113988aa0&gt;<code class="variable-op">,</code>
-  &lt;function __tableHSV at 0x113988b18&gt;<code class="variable-group">)</code><code class="variable-op">,</code>
+  &lt;function __computeHSV at 0x10d1b7c08&gt;<code class="variable-op">,</code>
+  &lt;function __tableHSV at 0x10d1b7c80&gt;<code class="variable-group">)</code><code class="variable-op">,</code>
 <code class="variable-ellipsis">...</code>
 </pre></td></tr></table>
 </dd>
@@ -1228,9 +1305,11 @@
       <dd><table><tr><td><pre class="variable">
 <code class="variable-group">{</code>1<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Elbow</code><code class="variable-quote">'</code><code class="variable-op">,</code>
  2<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Threshold</code><code class="variable-quote">'</code><code class="variable-op">,</code>
- 3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Gap Statistic</code><code class="variable-quote">'</code><code class="variable-op">,</code>
- 4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">f(K)</code><code class="variable-quote">'</code><code class="variable-op">,</code>
- 5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Custom</code><code class="variable-quote">'</code><code class="variable-group">}</code>
+ 3<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Gap Threshold</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 4<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Gap Statistic</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 5<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">f(K)</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 6<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Slider</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ 7<code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">Custom</code><code class="variable-quote">'</code><code class="variable-group">}</code>
 </pre></td></tr></table>
 </dd>
   </dl>
@@ -1269,7 +1348,7 @@
   <tr>
     <td align="left" class="footer">
     Generated by Epydoc 3.0.1
-    on Tue Jun  3 22:27:43 2014
+    on Thu Jun  5 14:44:45 2014
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
