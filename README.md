@@ -1,6 +1,8 @@
-##![alt text](http://www.xsyann.com/epitech/clustering/icon.png) Clustering
+## Clustering
 
 Image clustering using Python OpenCV
+
+![alt text](http://www.xsyann.com/epitech/clustering/icon.png)
 
 ![alt text](http://www.xsyann.com/epitech/clustering.png)
 
