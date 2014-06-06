@@ -7,7 +7,7 @@
 ## Contact <contact@xsyann.com>
 ##
 ## Started on  Fri Apr 25 18:16:06 2014 xs_yann
-## Last update Thu Jun  5 14:55:46 2014 xs_yann
+## Last update Fri Jun  6 12:41:58 2014 xs_yann
 ##
 
 import os
@@ -202,7 +202,7 @@ class Window(QWidget):
         """Save current clusters
         """
         path, filters = QFileDialog.getSaveFileName(self, self.tr('Open file'), '.',
-                                                    self.tr('Image (*.jpg *.png *.jpeg)'))
+                                                    self.tr('Image (*.jpg *.png *.jpeg *.bmp)'))
         if path:
             for i, cluster in enumerate(self.clusters):
                 fileName, fileExtension = os.path.splitext(path)
@@ -215,7 +215,7 @@ class Window(QWidget):
         """Open a file dialog.
         """
         path, filters = QFileDialog.getOpenFileName(self, self.tr('Open file'), '.',
-                                                    self.tr('Image (*.jpg *.png *.jpeg)'))
+                                                    self.tr('Image (*.jpg *.png *.jpeg *.bmp)'))
         if path:
             self.sourcePathField.setText(path)
 

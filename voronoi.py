@@ -7,7 +7,7 @@
 ## Contact <contact@xsyann.com>
 ##
 ## Started on  Sat May 10 09:29:51 2014 xs_yann
-## Last update Tue Jun  3 22:31:22 2014 xs_yann
+## Last update Fri Jun  6 11:54:30 2014 xs_yann
 ##
 
 import numpy as np
@@ -25,8 +25,8 @@ def circumCircle(pts):
 
     b = np.hstack((np.sum(pts * pts, axis=1), np.ones((1))))
     x = np.linalg.solve(A,b)
-    bary_coords = x[:-1]
-    return np.sum(pts * np.tile(bary_coords.reshape((pts.shape[0], 1)), (1, pts.shape[1])), axis=0)
+    baryCoords = x[:-1]
+    return np.sum(pts * np.tile(baryCoords.reshape((pts.shape[0], 1)), (1, pts.shape[1])), axis=0)
 
 def voronoi(points):
     """Return line segments describing the voronoi diagram of points.

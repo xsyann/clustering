@@ -7,7 +7,7 @@
 ## Contact <contact@xsyann.com>
 ##
 ## Started on  Fri Apr 25 18:16:06 2014 xs_yann
-## Last update Thu Jun  5 14:50:15 2014 xs_yann
+## Last update Fri Jun  6 11:59:27 2014 xs_yann
 ##
 
 import os
@@ -247,7 +247,7 @@ class Clusterer:
     K_MAX = 12 # Maxium cluster count
 
     K_LAST_ELBOW = 20
-    ALGO_OPTI = True
+    ALGO_OPTI = False
 
     THRESHOLD = 0.093
     GAP_THRESHOLD = 0.093
@@ -560,7 +560,7 @@ class Clusterer:
             print "K-Means for {} Clusters...".format(k),
             startTime = time.time()
         compactness, labels, centers = cv2.kmeans(samples, k,
-                                             criteria, 2, self.__kmeansModes[mode])
+                                                  criteria, 2, self.__kmeansModes[mode])
         if verbose:
                 print "in {:.3f} s".format(time.time() - startTime)
         return compactness, labels, centers
@@ -686,7 +686,7 @@ class Clusterer:
                     for i in xrange(k) for c in clusters[i]])
 
     def __estimateKGapStat(self, samples, mode, verbose):
-        """Estimate cluster count using gap statistic.
+        """Estimate cluster count using gap statistic. (Not finished)
         """
         refCount = 5
         sampleCount, featureCount = samples.shape

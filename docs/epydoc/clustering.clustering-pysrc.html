@@ -70,7 +70,7 @@
 <a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt class="py-comment">## Contact &lt;contact@xsyann.com&gt;</tt> </tt>
 <a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-comment">##</tt> </tt>
 <a name="L9"></a><tt class="py-lineno">  9</tt>  <tt class="py-line"><tt class="py-comment">## Started on  Fri Apr 25 18:16:06 2014 xs_yann</tt> </tt>
-<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment">## Last update Thu Jun  5 14:55:46 2014 xs_yann</tt> </tt>
+<a name="L10"></a><tt class="py-lineno"> 10</tt>  <tt class="py-line"><tt class="py-comment">## Last update Fri Jun  6 12:41:58 2014 xs_yann</tt> </tt>
 <a name="L11"></a><tt class="py-lineno"> 11</tt>  <tt class="py-line"><tt class="py-comment">##</tt> </tt>
 <a name="L12"></a><tt class="py-lineno"> 12</tt>  <tt class="py-line"> </tt>
 <a name="L13"></a><tt class="py-lineno"> 13</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">os</tt> </tt>
@@ -272,7 +272,7 @@ clustering.clustering.Window.__init__" class="py-name" href="#" onclick="return 
 </div><div id="Window.save-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Window.save-expanded"><a name="L202"></a><tt class="py-lineno">202</tt>  <tt class="py-line">        <tt class="py-docstring">"""Save current clusters</tt> </tt>
 <a name="L203"></a><tt class="py-lineno">203</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
 <a name="L204"></a><tt class="py-lineno">204</tt>  <tt class="py-line">        <tt class="py-name">path</tt><tt class="py-op">,</tt> <tt class="py-name">filters</tt> <tt class="py-op">=</tt> <tt class="py-name">QFileDialog</tt><tt class="py-op">.</tt><tt class="py-name">getSaveFileName</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tr</tt><tt class="py-op">(</tt><tt class="py-string">'Open file'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'.'</tt><tt class="py-op">,</tt> </tt>
-<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">                                                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tr</tt><tt class="py-op">(</tt><tt class="py-string">'Image (*.jpg *.png *.jpeg)'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L205"></a><tt class="py-lineno">205</tt>  <tt class="py-line">                                                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tr</tt><tt class="py-op">(</tt><tt class="py-string">'Image (*.jpg *.png *.jpeg *.bmp)'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
 <a name="L206"></a><tt class="py-lineno">206</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">path</tt><tt class="py-op">:</tt> </tt>
 <a name="L207"></a><tt class="py-lineno">207</tt>  <tt class="py-line">            <tt class="py-keyword">for</tt> <tt class="py-name">i</tt><tt class="py-op">,</tt> <tt class="py-name">cluster</tt> <tt class="py-keyword">in</tt> <tt class="py-name">enumerate</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">clusters</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 <a name="L208"></a><tt class="py-lineno">208</tt>  <tt class="py-line">                <tt class="py-name">fileName</tt><tt class="py-op">,</tt> <tt class="py-name">fileExtension</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">splitext</tt><tt class="py-op">(</tt><tt class="py-name">path</tt><tt class="py-op">)</tt> </tt>
@@ -285,7 +285,7 @@ clustering.clustering.Window.__init__" class="py-name" href="#" onclick="return 
 </div><div id="Window.loadImage-collapsed" style="display:none;" pad="+++" indent="++++++++"></div><div id="Window.loadImage-expanded"><a name="L215"></a><tt class="py-lineno">215</tt>  <tt class="py-line">        <tt class="py-docstring">"""Open a file dialog.</tt> </tt>
 <a name="L216"></a><tt class="py-lineno">216</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
 <a name="L217"></a><tt class="py-lineno">217</tt>  <tt class="py-line">        <tt class="py-name">path</tt><tt class="py-op">,</tt> <tt class="py-name">filters</tt> <tt class="py-op">=</tt> <tt class="py-name">QFileDialog</tt><tt class="py-op">.</tt><tt class="py-name">getOpenFileName</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tr</tt><tt class="py-op">(</tt><tt class="py-string">'Open file'</tt><tt class="py-op">)</tt><tt class="py-op">,</tt> <tt class="py-string">'.'</tt><tt class="py-op">,</tt> </tt>
-<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">                                                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tr</tt><tt class="py-op">(</tt><tt class="py-string">'Image (*.jpg *.png *.jpeg)'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+<a name="L218"></a><tt class="py-lineno">218</tt>  <tt class="py-line">                                                    <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tr</tt><tt class="py-op">(</tt><tt class="py-string">'Image (*.jpg *.png *.jpeg *.bmp)'</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
 <a name="L219"></a><tt class="py-lineno">219</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">path</tt><tt class="py-op">:</tt> </tt>
 <a name="L220"></a><tt class="py-lineno">220</tt>  <tt class="py-line">            <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">sourcePathField</tt><tt class="py-op">.</tt><tt class="py-name">setText</tt><tt class="py-op">(</tt><tt class="py-name">path</tt><tt class="py-op">)</tt> </tt>
 <a name="L221"></a><tt class="py-lineno">221</tt>  <tt class="py-line"> </tt>
@@ -712,7 +712,7 @@ expandto(location.href);
   <tr>
     <td align="left" class="footer">
     Generated by Epydoc 3.0.1
-    on Thu Jun  5 14:56:13 2014
+    on Fri Jun  6 12:42:04 2014
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

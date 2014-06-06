@@ -13,7 +13,7 @@ OPTIONS = {'argv_emulation': True, 'includes': ['PyQt5'],
            'plist': {'CFBundleShortVersionString':'0.1.0',},
            'iconfile':'icon.icns'}
 
-setup(
+setup(name='Clustering',
     app=APP,
     data_files=DATA_FILES,
     options={'py2app': OPTIONS},
