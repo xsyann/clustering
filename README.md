@@ -83,13 +83,13 @@ Matplotlib Qt5 compatibility: https://github.com/matplotlib/matplotlib/pull/3072
 
 ### References
 
-http://blog.echen.me/2011/03/19/counting-clusters/
-https://gist.github.com/michiexile/5635273
-http://www.stanford.edu/~hastie/Papers/gap.pdf
-http://datasciencelab.wordpress.com/2014/01/21/selection-of-k-in-k-means-clustering-reloaded/
-http://www.ee.columbia.edu/~dpwe/papers/PhamDN05-kmeans.pdf
-http://pami.uwaterloo.ca/groups/ras/PAMI_presentation.pdf
-http://www.ima.umn.edu/~iwen/REU/paper4.pdf
-http://docs.opencv.org/modules/core/doc/clustering.html
-http://stackoverflow.com/questions/10650645/python-calculate-voronoi-tesselation-from-scipys-delaunay-triangulation-in-3d
+- http://blog.echen.me/2011/03/19/counting-clusters/
+- https://gist.github.com/michiexile/5635273
+- http://www.stanford.edu/~hastie/Papers/gap.pdf
+- http://datasciencelab.wordpress.com/2014/01/21/selection-of-k-in-k-means-clustering-reloaded/
+- http://www.ee.columbia.edu/~dpwe/papers/PhamDN05-kmeans.pdf
+- http://pami.uwaterloo.ca/groups/ras/PAMI_presentation.pdf
+- http://www.ima.umn.edu/~iwen/REU/paper4.pdf
+- http://docs.opencv.org/modules/core/doc/clustering.html
+- http://stackoverflow.com/questions/10650645/python-calculate-voronoi-tesselation-from-scipys-delaunay-triangulation-in-3d
 
