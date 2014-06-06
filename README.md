@@ -2,8 +2,6 @@
 
 Image clustering using Python OpenCV
 
-![alt text](http://www.xsyann.com/epitech/clustering/icon.png)
-
 ![alt text](http://www.xsyann.com/epitech/clustering.png)
 
 ### Install
@@ -22,6 +20,8 @@ Image clustering using Python OpenCV
 Matplotlib Qt5 compatibility: https://github.com/matplotlib/matplotlib/pull/3072
 
 ### Features
+
+![alt text](http://www.xsyann.com/epitech/clustering/icon.png)
 
 **Elbow**
 
