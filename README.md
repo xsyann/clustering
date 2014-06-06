@@ -66,6 +66,7 @@ Matplotlib Qt5 compatibility: https://github.com/matplotlib/matplotlib/pull/3072
 
 ![alt text](http://www.xsyann.com/epitech/clustering/slider.png)
 
+------------------
 
 **One clustering feature**
 
