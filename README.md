@@ -2,7 +2,7 @@
 
 Image clustering using Python OpenCV
 
-![alt text](http://www.xsyann.com/epitech/clustering.png)
+![alt text](http://www.xsyann.com/epitech/clustering1.png)
 
 ### Install
 
